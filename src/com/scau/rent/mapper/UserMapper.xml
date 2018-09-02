@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scau.rent.mapper.UserMapper">
+
+	<!-- 根据用户名查询数据库 -->
+	<select id="findByName" parameterType="com.scau.rent.entity.extend.UserExtend"
+		resultType="com.scau.rent.entity.extend.UserExtend">
+		select * from t_user where user_name=#{user_name}
+	</select>
+	
+	<!-- 根据用户ID查询数据库 -->
+	<select id="findByID" parameterType="com.scau.rent.entity.extend.UserExtend"
+		resultType="com.scau.rent.entity.extend.UserExtend">
+		select * from t_user where user_id=#{user_id}
+	</select>
+
+	<!-- 向数据库添加用户 -->
+	<insert id="insertUser" parameterType="com.scau.rent.entity.extend.UserExtend">
+		<selectKey keyProperty="user_id" resultType="String" order="BEFORE">
+			select uuid()
+		</selectKey>
+		insert into t_user
+		values(#{user_id},#{user_name},#{user_password},#{user_phone},#{user_email},#{user_org},#{user_type},#{user_pic})
+	</insert>
+	
+	<!-- 修改用户密码 -->
+	<update id="updatePassword" parameterType="com.scau.rent.entity.QueryVo">
+	  update t_user
+	  set user_password = #{userExtend.user_password}
+	  where user_id = #{userExtend.user_id}
+	</update>
+	
+	<!-- 修改个人信息 -->
+	<update id="updateUser" parameterType="com.scau.rent.entity.QueryVo">
+	  update t_user
+	  set user_name = #{userExtend.user_name},
+	      user_phone = #{userExtend.user_phone},
+	      user_email = #{userExtend.user_email},
+	      user_org = #{userExtend.user_org}
+	  where user_id = #{userExtend.user_id}
+	</update>
+	
+	<!-- 修改个人信息 -->
+	<update id="updatePic" parameterType="com.scau.rent.entity.QueryVo">
+	  update t_user
+	  set user_pic = #{userExtend.user_pic }
+	  where user_id = #{userExtend.user_id}
+	</update>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scau.rent.mapper.PosterMapper">
+	<!-- 插入海报信息 -->
+	<insert id="insertPoster" parameterType="com.scau.rent.entity.QueryVo">
+		<selectKey keyProperty="posterExtend.poster_id" resultType="String"
+			order="BEFORE">
+			select uuid()
+		</selectKey>
+		insert into t_poster
+		values(#{posterExtend.poster_id},#{posterExtend.poster_content},#{posterExtend.poster_user},
+		#{posterExtend.poster_org},#{posterExtend.poster_phone},#{posterExtend.poster_location},
+		#{posterExtend.poster_support},#{posterExtend.poster_pic},#{posterExtend.poster_time},
+		#{posterExtend.poster_anotherpic})
+	</insert>
+
+	<!-- 插入海报申请记录信息 -->
+	<insert id="insertRecord" parameterType="com.scau.rent.entity.QueryVo">
+		<selectKey keyProperty="posterRecordExtend.record_id"
+			resultType="String" order="BEFORE">
+			select uuid()
+		</selectKey>
+		insert into t_record
+		values(#{posterRecordExtend.record_id},#{posterRecordExtend.record_poster.poster_id},
+		#{posterRecordExtend.record_createtime},#{posterRecordExtend.record_status},
+		#{posterRecordExtend.record_user.user_id},#{posterRecordExtend.record_admin},
+		#{posterRecordExtend.record_result})
+	</insert>
+
+	<!-- 查询粘在同一楼栋海报数量 -->
+	<select id="getRowCount" resultType="int"
+		parameterType="com.scau.rent.entity.extend.PosterExtend">
+		select count(*) from t_poster where poster_location = #{poster_location}
+	</select>
+
+	<!-- 查询用户的所有申请记录 -->
+	<resultMap type="com.scau.rent.entity.extend.PosterRecordExtend"
+		id="selectAllRecordsMap">
+		<id property="record_id" column="record_id" />
+		<result property="record_createtime" column="record_createtime" />
+		<result property="record_status" column="record_status" />
+		<result property="record_result" column="record_result" />
+		<result property="record_admin" column="record_admin" />
+		<association property="record_user" javaType="com.scau.rent.entity.extend.UserExtend">
+			<id property="user_id" column="user_id" />
+			<result property="user_name" column="user_name" />
+			<result property="user_password" column="user_password" />
+			<result property="user_phone" column="user_phone" />
+			<result property="user_email" column="user_email" />
+			<result property="user_org" column="user_org" />
+			<result property="user_type" column="user_type" />
+			<result property="user_pic" column="user_pic" />
+		</association>
+		<association property="record_poster"
+			javaType="com.scau.rent.entity.extend.PosterExtend">
+			<id property="poster_id" column="poster_id" />
+			<result property="poster_content" column="poster_content" />
+			<result property="poster_user" column="poster_user" />
+			<result property="poster_org" column="poster_org" />
+			<result property="poster_phone" column="poster_phone" />
+			<result property="poster_location" column="poster_location" />
+			<result property="poster_support" column="poster_support" />
+			<result property="poster_pic" column="poster_pic" />
+			<result property="poster_time" column="poster_time" />
+			<result property="poster_anotherpic" column="poster_anotherpic" />
+		</association>
+	</resultMap>
+	<select id="selectAllRecords" resultMap="selectAllRecordsMap"
+		parameterType="com.scau.rent.entity.QueryVo">
+		SELECT t_record.*,t_poster.*,t_user.*
+		from t_record,t_poster,t_user
+		where t_user.user_id = #{userExtend.user_id}
+		AND t_user.user_id = t_record.record_user
+		AND t_record.record_poster = t_poster.poster_id
+		order by t_record.record_createtime
+		limit #{start},#{end}
+	</select>
+	
+	<!-- 查询用户申请总记录数 -->
+	<select id="getRecordNumber" resultType="Integer" parameterType="com.scau.rent.entity.QueryVo">
+	    select count(*) from t_record where record_user = #{userExtend.user_id}
+	</select>
+</mapper>
