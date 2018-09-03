@@ -1,8 +1,11 @@
 package com.scau.rent.service.imp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.scau.rent.entity.PageBean;
 import com.scau.rent.entity.QueryVo;
 import com.scau.rent.entity.User;
 import com.scau.rent.entity.extend.UserExtend;
@@ -27,6 +30,8 @@ public class UserServiceImp implements UserService {
 	    //存在同名用户,抛出异常;否则添加用户到数据库
 			throw new Exception("用户名已存在");
 		}else {
+		//设置用户为普通用户
+		userExtend.setUser_type(0);
 	    //将密码加密，并将用户添加到数据库
 		userExtend.setUser_password(MD5Utils.md5(userExtend.getUser_password()));
 		userMapper.insertUser(userExtend);
@@ -40,7 +45,10 @@ public class UserServiceImp implements UserService {
 		if(user == null || 
 				!user.getUser_password().equals(MD5Utils.md5(userExtend.getUser_password()))) {
 			throw new Exception("用户名或密码错误");
-		}else return user;
+		}else if(user.getUser_type() != userExtend.getUser_type()){
+			throw new Exception("请正确选择身份");
+		}
+		else return user;
 	}
 
 	/*修改用户密码*/
@@ -82,6 +90,19 @@ public class UserServiceImp implements UserService {
 		userMapper.updatePic(vo);
 		UserExtend user = userMapper.findByID(vo.getUserExtend());
 		return user;
+	}
+
+	/*查询所有用户,属于管理员的操作*/
+	public PageBean<UserExtend> getAllUser(QueryVo vo) throws Exception {
+		Integer total_record = userMapper.getRowCount();
+		PageBean<UserExtend> pageBean = new PageBean<>(vo.getCurrent_page(), total_record);
+		Integer start = (pageBean.getCurrent_page() - 1)*pageBean.getPage_size();
+		Integer end = pageBean.getPage_size();
+		vo.setStart(start);
+		vo.setEnd(end);
+		List<UserExtend> userList = userMapper.findAll(vo);
+		pageBean.setRecords(userList);
+		return pageBean;
 	}
 
 }

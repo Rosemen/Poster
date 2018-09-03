@@ -15,6 +15,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.scau.rent.entity.extend.UserExtend">
 		select * from t_user where user_id=#{user_id}
 	</select>
+	
+	<!-- 查询所有用户：属于管理员的操作 -->
+	<select id="findAll" parameterType="com.scau.rent.entity.QueryVo"
+		resultType="com.scau.rent.entity.extend.UserExtend">
+		select * from t_user 
+		where user_type = 0
+		order by #{userExtend.user_name}
+		limit #{start},#{end} 
+	</select>
+	
+	<!-- 查询普通用户总数  -->
+	<select id="getRowCount" resultType="Integer">
+	    select count(*) from t_user where user_type=0
+	</select>
 
 	<!-- 向数据库添加用户 -->
 	<insert id="insertUser" parameterType="com.scau.rent.entity.extend.UserExtend">

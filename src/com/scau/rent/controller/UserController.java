@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.scau.rent.entity.PageBean;
 import com.scau.rent.entity.QueryVo;
 import com.scau.rent.entity.User;
 import com.scau.rent.entity.extend.UserExtend;
@@ -60,9 +61,10 @@ public class UserController {
 	/* 用户登录 */
 	@RequestMapping(value = "/login.action", method = { RequestMethod.POST })
 	public String login(RedirectAttributes model, HttpSession session, UserExtend userExtend) {
+		User user = null;
 		try {
 			// 登录
-			User user = userService.login(userExtend);
+			user = userService.login(userExtend);
 			// 保存对象到session中
 			session.setAttribute("user", user);
 		} catch (Exception e) {
@@ -74,7 +76,7 @@ public class UserController {
 			// 重定向
 			return "redirect:/user/toLogin.action";
 		}
-		// 重定向到主页面
+		//重定向到主页面
 		return "redirect:/jsp/home.jsp";
 	}
 
@@ -132,6 +134,15 @@ public class UserController {
 			session.setAttribute("user", user);
 		}
 		return "home";
+	}
+	
+	/*管理员查询所有用户*/
+	/* 修改用户信息 */
+	@RequestMapping("/getAllUser.action")
+	public String getAllUser(QueryVo vo, Model model) throws Exception {
+		PageBean<UserExtend> pageBean = userService.getAllUser(vo);
+		model.addAttribute("pageBean", pageBean);
+		return "admin/list";
 	}
 
 	/* 重定向到登录页面 */

@@ -64,6 +64,19 @@ body {
 				</div>
 				
 				<div class="form-group">
+					<label for="posterSupport" class="col-sm-3 control-label"><b
+						style="color: red">*</b>用户类型:</label>
+					<div class="col-sm-5 text-left">
+						<label class="radio-inline">
+                          <input type="radio" value="0" name="user_type" checked="checked">普通用户
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" value="1" name="user_type">管理员
+                        </label>
+					</div>
+				</div>
+				
+				<div class="form-group">
 					<div class="col-sm-8 text-right">
 						<input id="send" type="submit" value="登录" class="btn btn-success"
 							>

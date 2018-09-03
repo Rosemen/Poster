@@ -123,7 +123,16 @@ body {
 				    <li role="presentation">
 				       <img id="head" title="点击更换头像" src="" width="50px" height="50px" style="border-radius: 30px" onclick="changePic()">
 				   </li>
-					<li role="presentation"><a href="#">当前用户：<span
+					<li role="presentation"><a href="#">
+			<c:choose>
+			        <c:when test="${empty user or user.user_type eq 0 }">
+			                              普通用户:
+			       	</c:when>
+			        <c:otherwise>
+			                             管理员:
+			        </c:otherwise>
+			</c:choose>
+					<span
 							class="badge">${user.user_name }</span></a></li>
 					<li><a href="<c:url value='/user/exit.action'/>"><span class="glyphicon glyphicon-lock"></span>退出登录
 					</a></li>
@@ -142,6 +151,8 @@ body {
 		<!-- 左侧导航栏 -->
 		<div class="pageSidebar">
 			<ul class="nav nav-stacked nav-pills">
+			<c:choose>
+			    <c:when test="${empty user or user.user_type eq 0 }">
 				<li role="presentation"><a href="<c:url value='/jsp/poster/apply.jsp'/>" target="mainFrame">海报申请</a>
 				</li>
 				<li role="presentation"><a href="<c:url value='/poster/getAllRecords.action'/>" target="mainFrame">我的申请</a>
@@ -158,6 +169,32 @@ body {
 					</ul></li>
 				<li role="presentation"><a href="<c:url value='/'/>" target="mainFrame">联系管理员</a>
 				</li>
+			    </c:when>
+			    <c:otherwise>
+			    <li role="presentation"><a href="<c:url value='/'/>" target="mainFrame">查看申请</a>
+				</li>
+				<li role="presentation"><a href="<c:url value='/user/getAllUser.action'/>" target="mainFrame">查看用户</a>
+
+				</li>
+				<li role="presentation"><a href="<c:url value='/'/>" target="mainFrame">我的消息</a>
+				</li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#"> 个人设置<span class="caret"></span>
+				</a>
+					<ul class="dropdown-menu">
+						<li><a href="<c:url value='/jsp/user/edit_password.jsp'/>" target="mainFrame">修改密码</a></li>
+						<li><a href="<c:url value='/jsp/user/edit.jsp'/>" target="mainFrame">修改个人信息</a></li>
+						<li><a href="<c:url value='#'/>" target="mainFrame">查看个人信息</a></li>
+					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#"> 管理中心<span class="caret"></span>
+				</a>
+					<ul class="dropdown-menu">
+						<li><a href="<c:url value='#'/>" target="mainFrame">修改申请</a></li>
+						<li><a href="<c:url value='#'/>" target="mainFrame">删除申请</a></li>
+					</ul></li>
+			    </c:otherwise>
+			</c:choose>
 			</ul>
 		</div>
 		<!-- 左侧导航和正文内容的分隔线 -->

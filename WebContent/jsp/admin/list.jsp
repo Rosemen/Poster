@@ -25,7 +25,7 @@
 </head>
 <body>
 <table class="table table-hover table-striped" style="table-layout: fixed;">
-	<caption><span>当前位置》》<span style="color: red"><b>我的申请</b></span></span></caption>
+	<caption><span>当前位置》》<span style="color: red"><b>查看用户</b></span></span></caption>
 	<thead>
 	    <tr>
 	    <th colspan="2">
@@ -36,54 +36,27 @@
           </th>
         </tr>
 		<tr>
-			<th>海报内容</th>
-			<th>申请人</th>
-			<th>申请单位</th>
-			<th>申请时间</th>
-			<th>申请状态</th>
+			<th>用户名</th>
+			<th>邮箱</th>
+			<th>手机号码</th>
+			<th>组织/社团</th>
 			<th>操作</th>
 		</tr>
 	</thead>
 	<tbody>
-	<c:forEach items="${pageBean.records }" var="record">
+	<c:forEach items="${pageBean.records }" var="user">
 		<tr class="active">
-			<td class="col-sm-5" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${record.record_poster.poster_content }</td>
-			<td>${record.record_poster.poster_user }</td>
-			<td>${record.record_poster.poster_org }</td>
+			<td class="col-sm-5" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${user.user_name }</td>
+			<td>${user.user_email }</td>
+			<td>${user.user_phone }</td>
 			<td>
-			<fmt:formatDate value="${record.record_createtime }" 
-			pattern="yyyy-MM-dd"/>
+			   ${user.user_org }
 			</td>
 			<td>
-			 <c:choose>
-			    <c:when test="${record.record_status eq 0 }"><span style="color:blue"><b>待处理</b></span></c:when>
-			    <c:otherwise>
-			        <c:if test="${record.record_result eq 0 }"><span style="color:red"><b>未通过</b></span></c:if>
-			        <c:if test="${record.record_result eq 1 }"><span style="color:green"><b>通过</b></span></c:if>
-			    </c:otherwise>
-			 </c:choose>
-			</td>
-			<td>
-			<form action="<c:url value='/jsp/poster/show.jsp'/>" style="padding:0px;margin:0px;" method="post">
-			    <input type="hidden" name="poster_user" value="${record.record_poster.poster_user }">
-			    <input type="hidden" name="poster_org" value="${record.record_poster.poster_org }">
-			    <input type="hidden" name="poster_phone" value="${record.record_poster.poster_phone }">
-			    <input type="hidden" name="poster_location" value="${record.record_poster.poster_location }">
-			    <input type="hidden" name="poster_time" value="${record.record_poster.poster_time }">
-			    <input type="hidden" name="poster_support" value="${record.record_poster.poster_support }">
-			    <input type="hidden" name="poster_content" value="${record.record_poster.poster_content }">
-			    <input type="hidden" name="poster_pic" value="${record.record_poster.poster_pic }">
-			    <input type="hidden" name="poster_anotherpic" value="${record.record_poster.poster_anotherpic }">
-			    <input type="button" class="btn btn-info btn-xs" onclick="this.form.submit()" value="海报详情">
-			</form>
+			   <a href="#">他的申请</a>
 			</td>
 		</tr>
 	</c:forEach>
-<tr style="background-color:white;border-bottom: 0px;">
-<td><form action="<c:url value='/poster/getAllRecords.action'/>" id="page">
-     <input type="hidden" id="currentPage" name="current_page" value="">
-   </form></td>
-</tr>
 	</tbody>
 </table>
 <div class="navbar-fixed-bottom">

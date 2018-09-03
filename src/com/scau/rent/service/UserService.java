@@ -1,5 +1,6 @@
 package com.scau.rent.service;
 
+import com.scau.rent.entity.PageBean;
 import com.scau.rent.entity.QueryVo;
 import com.scau.rent.entity.User;
 import com.scau.rent.entity.extend.UserExtend;
@@ -28,4 +29,6 @@ public interface UserService {
 	/*根据ID查询用户*/
 	public UserExtend findByID(UserExtend userExtend) throws Exception;
 	
+	/*查询所有用户*/
+	public PageBean<UserExtend> getAllUser(QueryVo vo) throws Exception;
 }
