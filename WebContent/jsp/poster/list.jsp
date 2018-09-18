@@ -25,7 +25,18 @@
 </head>
 <body>
 <table class="table table-hover table-striped" style="table-layout: fixed;">
-	<caption><span>当前位置》》<span style="color: red"><b>我的申请</b></span></span></caption>
+	<caption>
+	<c:if test="${empty user or user.user_type eq 0 }">
+	<a href="<c:url value='/jsp/welcome.jsp'/>">
+	<span style="color: blue;text-decoration: underline;">返回</span>
+	</a>
+	</c:if>
+	<c:if test="${user.user_type eq 1 }">
+	<a href="<c:url value='/user/getAllUser.action'/>">
+	<span style="color: blue;text-decoration: underline;">返回</span>
+	</a>
+	</c:if>
+	</caption>
 	<thead>
 	    <tr>
 	    <th colspan="2">
@@ -65,6 +76,7 @@
 			</td>
 			<td>
 			<form action="<c:url value='/jsp/poster/show.jsp'/>" style="padding:0px;margin:0px;" method="post">
+			    <input type="hidden" name="user_id" value="${record.record_user.user_id }">
 			    <input type="hidden" name="poster_user" value="${record.record_poster.poster_user }">
 			    <input type="hidden" name="poster_org" value="${record.record_poster.poster_org }">
 			    <input type="hidden" name="poster_phone" value="${record.record_poster.poster_phone }">
@@ -81,6 +93,7 @@
 	</c:forEach>
 <tr style="background-color:white;border-bottom: 0px;">
 <td><form action="<c:url value='/poster/getAllRecords.action'/>" id="page">
+     <input type="hidden" name="userExtend.user_id" value="${current_userId }">
      <input type="hidden" id="currentPage" name="current_page" value="">
    </form></td>
 </tr>

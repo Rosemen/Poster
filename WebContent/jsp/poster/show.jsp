@@ -69,7 +69,7 @@ function imgShow(outerdiv, innerdiv, bigimg, _this){
 </script>
 </head>
 <body>
-<span>当前位置》》<a href="<c:url value='/poster/getAllRecords.action'/>">我的申请</a>》》</span><span style="color: red"><b>申请详情</b></span>
+<span style="color:blue;text-decoration: underline;"><a href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${param.user_id }">返回</a></span>
    <div class="container">
 		<div class="col-sm-offset-2 col-md-offset-2"
 			style="margin-top: 20px">

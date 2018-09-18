@@ -46,9 +46,11 @@
     <!-- 配置拦截器 -->
     <mvc:interceptors>
        <mvc:interceptor>
-          <!-- 拦截所有 -->
+          <!-- 拦截所有控制器 -->
           <mvc:mapping path="/**"/>
+          <mvc:exclude-mapping path="/user/login.action"/>
           <mvc:exclude-mapping path="/user/toLogin.action"/>
+          <mvc:exclude-mapping path="/user/regist.action"/>
           <mvc:exclude-mapping path="/user/toRegist.action"/>
           <bean class="com.scau.rent.utils.interceptor.LoginInterceptor"></bean>
        </mvc:interceptor>

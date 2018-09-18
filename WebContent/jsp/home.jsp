@@ -155,7 +155,7 @@ body {
 			    <c:when test="${empty user or user.user_type eq 0 }">
 				<li role="presentation"><a href="<c:url value='/jsp/poster/apply.jsp'/>" target="mainFrame">海报申请</a>
 				</li>
-				<li role="presentation"><a href="<c:url value='/poster/getAllRecords.action'/>" target="mainFrame">我的申请</a>
+				<li role="presentation"><a href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${user.user_id}" target="mainFrame">我的申请</a>
 
 				</li>
 				<li role="presentation"><a href="<c:url value='/'/>" target="mainFrame">我的通知</a>

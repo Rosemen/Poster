@@ -25,7 +25,7 @@
 </head>
 <body>
 <table class="table table-hover table-striped" style="table-layout: fixed;">
-	<caption><span>当前位置》》<span style="color: red"><b>查看用户</b></span></span></caption>
+	<caption><a href="<c:url value='/jsp/welcome.jsp'/>"><span style="color: blue;text-decoration: underline;">返回</span></a></caption>
 	<thead>
 	    <tr>
 	    <th colspan="2">
@@ -44,16 +44,16 @@
 		</tr>
 	</thead>
 	<tbody>
-	<c:forEach items="${pageBean.records }" var="user">
+	<c:forEach items="${pageBean.records }" var="myUser">
 		<tr class="active">
-			<td class="col-sm-5" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${user.user_name }</td>
-			<td>${user.user_email }</td>
-			<td>${user.user_phone }</td>
+			<td class="col-sm-5" style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">${myUser.user_name }</td>
+			<td>${myUser.user_email }</td>
+			<td>${myUser.user_phone }</td>
 			<td>
-			   ${user.user_org }
+			   ${myUser.user_org }
 			</td>
 			<td>
-			   <a href="#">他的申请</a>
+			   <a href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${myUser.user_id }">他的申请</a>
 			</td>
 		</tr>
 	</c:forEach>
