@@ -34,7 +34,4 @@ public interface UserMapper {
 	
 	/*修改用户头像*/
 	public void updatePic(QueryVo vo) throws Exception;
-	
-
-	
 }

@@ -104,5 +104,4 @@ public class UserServiceImp implements UserService {
 		pageBean.setRecords(userList);
 		return pageBean;
 	}
-
 }

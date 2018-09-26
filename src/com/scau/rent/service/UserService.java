@@ -31,4 +31,5 @@ public interface UserService {
 	
 	/*查询所有用户*/
 	public PageBean<UserExtend> getAllUser(QueryVo vo) throws Exception;
+    
 }

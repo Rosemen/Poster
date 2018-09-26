@@ -2,9 +2,7 @@ package com.scau.rent.controller;
 
 import java.io.File;
 import java.util.UUID;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.scau.rent.entity.PageBean;
 import com.scau.rent.entity.QueryVo;
+import com.scau.rent.entity.extend.MessagesExtend;
 import com.scau.rent.entity.extend.PosterExtend;
 import com.scau.rent.entity.extend.PosterRecordExtend;
 import com.scau.rent.entity.extend.UserExtend;
@@ -64,7 +62,7 @@ public class PosterController {
 		PageBean<PosterRecordExtend> pageBean = posterService.applyPoster(queryVo);
 		model.addAttribute("pageBean", pageBean);
 		//返回到申请记录列表
-		return "poster/list";
+		return "poster/records";
 	}
 	
 	@RequestMapping(value = "/getAllRecords.action")
@@ -72,11 +70,52 @@ public class PosterController {
 		PageBean<PosterRecordExtend> pageBean = posterService.getPageBean(queryVo);
 		model.addAttribute("pageBean", pageBean);
 		model.addAttribute("current_userId",queryVo.getUserExtend().getUser_id());
-		return "poster/list";
+		return "poster/records";
+	}
+	
+	@RequestMapping(value = "/getAll.action")
+	public String getAll(QueryVo queryVo,HttpSession session,Model model) throws Exception {
+		PageBean<PosterRecordExtend> pageBean = posterService.getPageBeans(queryVo);
+		model.addAttribute("pageBean", pageBean);
+		return "poster/records";
 	}
 	
 	@RequestMapping(value = "/getPosterNumber.action")
 	public @ResponseBody Integer getPosterNumber(PosterExtend posterExtend) throws Exception {
 		return posterService.getPosterNumber(posterExtend);
 	}
+	
+	@RequestMapping(value = "/handle.action")
+	public String handle(PosterRecordExtend posterRecordExtend) throws Exception {
+		posterService.handleRecord(posterRecordExtend);
+		return "success";
+	}
+	
+	
+	/*获取用户的所有未读消息 */
+	@RequestMapping("/getAllMessages.action")
+	public String getAllMessages(HttpSession session,QueryVo vo,Model model) throws Exception {
+		UserExtend userExtend = (UserExtend)session.getAttribute("user");
+		
+		vo.setUserExtend(userExtend);
+		PageBean<MessagesExtend> pageBean = posterService.getMessages(vo);
+		model.addAttribute("pageBean", pageBean);
+	    return "user/messages";
+	}
+	
+	/*查询未读消息的总数*/
+	@RequestMapping("/getMsgNumber.action")
+	public @ResponseBody Integer getMsgNumber(HttpSession session) throws Exception {
+		 UserExtend userExtend = (UserExtend)session.getAttribute("user");
+		 Integer number = posterService.getMsgNumber(userExtend);
+		 return  number;
+	}
+	
+	/*设置用户消息为已读 */
+	@RequestMapping("/updateMsgStatus.action")
+	public String updateMsgStatus (MessagesExtend messagesExtend) throws Exception {
+		posterService.updateMsgStatus(messagesExtend);
+		return "redirect:/poster/getAllMessages.action";
+	}
+	
 }

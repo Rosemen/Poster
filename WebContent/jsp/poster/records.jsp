@@ -19,6 +19,14 @@
 <script type="text/javascript">
   function changePage(page_num){
 	  $("#currentPage").val(page_num);
+	  <c:choose>
+	   <c:when test="${not empty current_userId }">
+	   $("#page").attr("action","<c:url value='/poster/getAllRecords.action'/>");
+	   </c:when>
+	   <c:otherwise>
+	   $("#page").attr("action","<c:url value='/poster/getAll.action'/>");
+	   </c:otherwise>
+	</c:choose>
 	  $("#page").submit();
   }
 </script>
@@ -76,7 +84,8 @@
 			</td>
 			<td>
 			<form action="<c:url value='/jsp/poster/show.jsp'/>" style="padding:0px;margin:0px;" method="post">
-			    <input type="hidden" name="user_id" value="${record.record_user.user_id }">
+			    <input type="hidden" name="user_id" value="${current_userId }">
+			    <input type="hidden" name="record_user" value="${record.record_user.user_id }">
 			    <input type="hidden" name="poster_user" value="${record.record_poster.poster_user }">
 			    <input type="hidden" name="poster_org" value="${record.record_poster.poster_org }">
 			    <input type="hidden" name="poster_phone" value="${record.record_poster.poster_phone }">
@@ -86,13 +95,20 @@
 			    <input type="hidden" name="poster_content" value="${record.record_poster.poster_content }">
 			    <input type="hidden" name="poster_pic" value="${record.record_poster.poster_pic }">
 			    <input type="hidden" name="poster_anotherpic" value="${record.record_poster.poster_anotherpic }">
-			    <input type="button" class="btn btn-info btn-xs" onclick="this.form.submit()" value="海报详情">
+			    <input type="hidden" name="record_id" value="${record.record_id }">
+			    <input type="hidden" name="record_status" value="${record.record_status }">
+			    <c:if test="${user.user_type eq 0 }">
+			    <input type="button" class="btn btn-info btn-xs" onclick="this.form.submit()" value="查看详情">
+			    </c:if>
+			    <c:if test="${user.user_type eq 1 }">
+			    <input type="button" class="btn btn-info btn-xs" onclick="this.form.submit()" value="查看并审批">
+			    </c:if>
 			</form>
 			</td>
 		</tr>
 	</c:forEach>
 <tr style="background-color:white;border-bottom: 0px;">
-<td><form action="<c:url value='/poster/getAllRecords.action'/>" id="page">
+<td><form action="" id="page">
      <input type="hidden" name="userExtend.user_id" value="${current_userId }">
      <input type="hidden" id="currentPage" name="current_page" value="">
    </form></td>

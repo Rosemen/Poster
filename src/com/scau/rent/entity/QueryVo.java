@@ -1,5 +1,6 @@
 package com.scau.rent.entity;
 
+import com.scau.rent.entity.extend.MessagesExtend;
 import com.scau.rent.entity.extend.PosterExtend;
 import com.scau.rent.entity.extend.PosterRecordExtend;
 import com.scau.rent.entity.extend.UserExtend;
@@ -19,6 +20,7 @@ public class QueryVo {
 	private UserExtend userExtend;
 	private PosterExtend posterExtend;
 	private PosterRecordExtend posterRecordExtend;
+	private MessagesExtend messageExtend;
 
 	public String getOld_password() {
 		return old_password;
@@ -82,6 +84,14 @@ public class QueryVo {
 
 	public void setPosterRecordExtend(PosterRecordExtend posterRecordExtend) {
 		this.posterRecordExtend = posterRecordExtend;
+	}
+
+	public MessagesExtend getMessageExtend() {
+		return messageExtend;
+	}
+
+	public void setMessageExtend(MessagesExtend messageExtend) {
+		this.messageExtend = messageExtend;
 	}
 
 }

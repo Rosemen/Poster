@@ -21,12 +21,22 @@
 <script
 	src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+
 $(function(){
     $(".img1").click(function(){
         var _this = $(this);//将当前的pimg元素作为_this传入函数
         imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
     });
 });
+
+function handle(){
+	
+	if("${param.record_status}" == "1") //已经处理过这个请求
+		$('#myModal').modal('hide')
+	else { //还没处理过，弹出处理窗口 
+		$("#updateForm").submit();
+	}
+}
  
 function imgShow(outerdiv, innerdiv, bigimg, _this){
     var src = _this.attr("src");//获取当前点击的pimg元素中的src属性
@@ -69,89 +79,149 @@ function imgShow(outerdiv, innerdiv, bigimg, _this){
 </script>
 </head>
 <body>
-<span style="color:blue;text-decoration: underline;"><a href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${param.user_id }">返回</a></span>
-   <div class="container">
-		<div class="col-sm-offset-2 col-md-offset-2"
-			style="margin-top: 20px">
-		
-			<form id="show_form" class="form-horizontal text-center" role="form" 
-			style="width: 600px; background-color: #FFFAFA; opacity: 0.9; padding-top: 1.875rem /* 30px */; border-radius: 10px;">
+	<span style="color: blue; text-decoration: underline;"> <c:choose>
+			<c:when test="${not empty param.user_id }">
+				<a
+					href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${param.user_id }">返回</a>
+			</c:when>
+			<c:otherwise>
+				<a href="<c:url value='/poster/getAll.action'/>">返回</a>
+			</c:otherwise>
+		</c:choose>
+
+	</span>
+	<div class="container">
+		<div class="col-sm-offset-2 col-md-offset-2" style="margin-top: 20px">
+
+			<form id="show_form" class="form-horizontal text-center" role="form"
+				style="width: 600px; background-color: #FFFAFA; opacity: 0.9; padding-top: 1.875rem /* 30px */; border-radius: 10px;">
 				<div class="form-group">
 					<label for="posterUser" class="col-sm-2 control-label"><b
 						style="color: red"></b>申请人:</label>
 					<div class="col-sm-4">
-						<input name="posterExtend.poster_user" type="text" class="form-control"
-							readonly="readonly"  id="posterUser"  value="${param.poster_user }">
+						<input name="posterExtend.poster_user" type="text"
+							class="form-control" readonly="readonly" id="posterUser"
+							value="${param.poster_user }">
 					</div>
 					<label for="org" class="col-sm-2 control-label"><b
 						style="color: red"></b>组织/社团:</label>
 					<div class="col-sm-4">
-						<input name="posterExtend.poster_org" type="text" class="form-control"
-							readonly="readonly" id="org"  value="${param.poster_org }">
+						<input name="posterExtend.poster_org" type="text"
+							class="form-control" readonly="readonly" id="org"
+							value="${param.poster_org }">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="posterPhone" class="col-sm-2 control-label"><b
 						style="color: red"></b>联系电话:</label>
 					<div class="col-sm-4">
-						<input name="posterExtend.poster_phone" type="text" class="form-control"
-							readonly="readonly" id="posterPhone"  value="${param.poster_phone }">
+						<input name="posterExtend.poster_phone" type="text"
+							class="form-control" readonly="readonly" id="posterPhone"
+							value="${param.poster_phone }">
 					</div>
 					<label for="posterLocation" class="col-sm-2 control-label"><b
 						style="color: red"></b>粘贴楼栋:</label>
 					<div class="col-sm-4">
-						<input name="posterExtend.poster_location" type="text" class="form-control"
-							readonly="readonly" id="posterLocation"  value="${param.poster_location }">
+						<input name="posterExtend.poster_location" type="text"
+							class="form-control" readonly="readonly" id="posterLocation"
+							value="${param.poster_location }">
 					</div>
 				</div>
 				<div class="form-group">
-				   <label for="posterTime" class="col-sm-2 control-label"><b
+					<label for="posterTime" class="col-sm-2 control-label"><b
 						style="color: red"></b>粘贴天数:</label>
 					<div class="col-sm-3 text-left">
-                          <input id="posterTime" value="${param.poster_time }" type="text" class="form-control" readonly="readonly" name="posterExtend.poster_time">
+						<input id="posterTime" value="${param.poster_time }" type="text"
+							class="form-control" readonly="readonly"
+							name="posterExtend.poster_time">
 					</div>
-					<span  class="col-sm-1 help-block text-left"
-						 style="padding-left: 0px;">天</span>
-					<label for="posterSupport" class="col-sm-2 control-label"><b
-						style="color: red"></b>有无赞助:</label>
+					<span class="col-sm-1 help-block text-left"
+						style="padding-left: 0px;">天</span> <label for="posterSupport"
+						class="col-sm-2 control-label"><b style="color: red"></b>有无赞助:</label>
 					<div class="col-sm-4 text-left">
-						<label class="radio-inline">
-                          <input type="radio" value="1" name="posterExtend.poster_support"  <c:if test='${param.poster_support eq 1 }'>checked</c:if> >有
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" value="0" name="posterExtend.poster_support" readonly="readonly" <c:if test='${param.poster_support eq 0 }'>checked</c:if>>无
-                        </label>
+						<label class="radio-inline"> <input type="radio" value="1"
+							name="posterExtend.poster_support"
+							<c:if test='${param.poster_support eq 1 }'>checked</c:if>>有
+						</label> <label class="radio-inline"> <input type="radio"
+							value="0" name="posterExtend.poster_support" readonly="readonly"
+							<c:if test='${param.poster_support eq 0 }'>checked</c:if>>无
+						</label>
 					</div>
 				</div>
+				<div class="form-group"></div>
 				<div class="form-group">
-			    </div>
-			    <div class="form-group">
 					<label for="posterContent" class="col-sm-2 control-label"><b
 						style="color: red">*</b>海报内容:</label>
 					<div class="col-sm-10 text-left">
-						<textarea readonly="readonly" name="posterExtend.poster_content" id="posterContent" class="form-control " style="resize:none" rows="5">${param.poster_content }</textarea>
+						<textarea readonly="readonly" name="posterExtend.poster_content"
+							id="posterContent" class="form-control " style="resize: none"
+							rows="5">${param.poster_content }</textarea>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="posterPic" class="col-sm-2 control-label"><b
-						style="color: red">*</b>相关材料:</label>
-					<span  class="col-sm-6 help-block text-right"
-						 >(海报图片与盖章后申请表图片)</span>
+						style="color: red">*</b>相关材料:</label> <span
+						class="col-sm-6 help-block text-right">(海报图片与盖章后申请表图片)</span>
 				</div>
 				<div class="form-group">
-				<label for="pic" class="col-sm-2 control-label"></label>
-				<div class="col-sm-8 text-left" id="show" style="height: 100px;">
-					<img class="img1" style='float:left;margin-right:5px;border:1px gray solid;' width='100px' height='100px' src="${param.poster_pic }"/>
-					<img class="img1" style='float:left;margin-right:5px;border:1px gray solid;' width='100px' height='100px' src="${param.poster_anotherpic }"/>
+					<label for="pic" class="col-sm-2 control-label"></label>
+					<div class="col-sm-8 text-left" id="show" style="height: 100px;">
+						<img class="img1"
+							style='float: left; margin-right: 5px; border: 1px gray solid;'
+							width='100px' height='100px' src="${param.poster_pic }" /> <img
+							class="img1"
+							style='float: left; margin-right: 5px; border: 1px gray solid;'
+							width='100px' height='100px' src="${param.poster_anotherpic }" />
+					</div>
 				</div>
+				<div id="outerdiv"
+					style="position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.7); z-index: 2; width: 100%; height: 100%; display: none;">
+					<div id="innerdiv" style="position: absolute;">
+						<img id="bigimg" style="border: 5px solid #fff;" src="" />
+					</div>
 				</div>
-				<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
-                   <div id="innerdiv" style="position:absolute;">
-                       <img id="bigimg" style="border:5px solid #fff;" src="" />
-                  </div>
-               </div>
 			</form>
 		</div>
+       <c:if test="${user.user_type eq 1 }">
+		<button class="btn btn-primary pull-right" data-toggle="modal"
+			data-target="#myModal" style="margin-right:200px;">审批</button>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">审批申请</h4>
+					</div>
+					<div class="modal-body">
+						<c:choose>
+							<c:when test="${param.record_status eq 1 }">
+           				            你已经审批过这个请求了!
+           				   </c:when>
+							<c:otherwise>
+							 <form id="updateForm" method="post" action="<c:url value='/poster/handle.action'/>" >
+							    <input type="hidden" name="record_id" value="${param.record_id }">
+							    <input type="hidden" name="record_user.user_id" value="${param.record_user }">
+								<input type="radio" name="record_result" value="1">通过申请<br>
+								<input type="radio" name="record_result" value="0">拒绝申请<br>
+							 </form>
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-primary" onclick="handle()">
+							确定</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</c:if>
 	</div>
 </body>
 </html>
