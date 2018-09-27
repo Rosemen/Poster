@@ -184,7 +184,7 @@ body {
 					</c:when>
 					<c:otherwise>
 						<li role="presentation"><a
-							href="<c:url value='/poster/getAll.action'/>" target="mainFrame">查看申请</a>
+							href="<c:url value='/poster/getAllRecords.action'/>" target="mainFrame">查看申请</a>
 						</li>
 						<li role="presentation"><a
 							href="<c:url value='/user/getAllUser.action'/>"

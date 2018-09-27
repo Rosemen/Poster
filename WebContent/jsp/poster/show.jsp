@@ -79,15 +79,9 @@ function imgShow(outerdiv, innerdiv, bigimg, _this){
 </script>
 </head>
 <body>
-	<span style="color: blue; text-decoration: underline;"> <c:choose>
-			<c:when test="${not empty param.user_id }">
+	<span style="color: blue; text-decoration: underline;">
 				<a
 					href="<c:url value='/poster/getAllRecords.action'/>?userExtend.user_id=${param.user_id }">返回</a>
-			</c:when>
-			<c:otherwise>
-				<a href="<c:url value='/poster/getAll.action'/>">返回</a>
-			</c:otherwise>
-		</c:choose>
 
 	</span>
 	<div class="container">

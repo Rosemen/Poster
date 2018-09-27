@@ -32,7 +32,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询粘在同一楼栋海报数量 -->
 	<select id="getRowCount" resultType="int"
 		parameterType="com.scau.rent.entity.extend.PosterExtend">
-		select count(*) from t_poster where poster_location = #{poster_location}
+		select count(*) from t_poster 
+		<where>
+		   <if test="poster_location != null and poster_location != ''">
+		     poster_location = #{poster_location}
+		   </if>
+		</where>
 	</select>
 
 	<!-- 查询所有申请记录 -->
@@ -67,12 +72,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result property="poster_anotherpic" column="poster_anotherpic" />
 		</association>
 	</resultMap>
+	
 	<sql id="queryAll">
 	    SELECT t_record.*,t_poster.*,t_user.*
 		from t_record,t_poster,t_user
 		<where>
 		    <if test="userExtend != null">
-		        <if test="userExtend.user_id != null">
+		        <if test="userExtend.user_id != null and userExtend.user_id != ''">
 		            t_user.user_id = #{userExtend.user_id}
 		        </if>
 		    </if>
@@ -82,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by t_record.record_createtime desc
 		limit #{start},#{end}
 	</sql>
+	
 	<select id="selectAllRecords" resultMap="selectAllRecordsMap"
 		parameterType="com.scau.rent.entity.QueryVo">
 		 <include refid="queryAll"></include>
@@ -92,21 +99,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    select count(*) from t_record 
 	    <where>
 	        <if test="userExtend != null">
-	            <if test="userExtend.user_id != null">
+	            <if test="userExtend.user_id != null and userExtend.user_id != ''">
 	                 record_user = #{userExtend.user_id}
 	            </if>
 	        </if>
 	    </where>
 	</select>
 	
-	<!-- 更新申请记录的状态 -->
-	<update id="updateRecordStatus" parameterType="com.scau.rent.entity.extend.PosterRecordExtend">
-	   update t_record set record_status = #{record_status},record_result = #{record_result}
-	   where record_id = #{record_id}
-	</update>
-	
+	<!-- 从这里往下是关于消息的增、删、改、查的操作 -->
 	<sql id="msg_query">
-	    <if test="user_id != null">
+	    <if test="user_id != null and user_id != ''">
 	         msg_user = #{user_id}
 	    </if>
 	    <if test="1==1">
@@ -146,6 +148,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	           msg_id = #{msg_id}
 	        </if>
 	     </where>
+	</update>
+	
+	<!-- 更新申请记录的状态 -->
+	<update id="updateRecordStatus" parameterType="com.scau.rent.entity.extend.PosterRecordExtend">
+	   update t_record set record_status = #{record_status},record_result = #{record_result}
+	   <where>
+	      <if test="record_id != null and record_id != ''">
+	         record_id = #{record_id}
+	      </if>
+	   </where>
 	</update>
 	
 	<!-- 插入一条新消息 -->

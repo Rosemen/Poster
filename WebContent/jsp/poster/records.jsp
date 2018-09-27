@@ -19,14 +19,7 @@
 <script type="text/javascript">
   function changePage(page_num){
 	  $("#currentPage").val(page_num);
-	  <c:choose>
-	   <c:when test="${not empty current_userId }">
-	   $("#page").attr("action","<c:url value='/poster/getAllRecords.action'/>");
-	   </c:when>
-	   <c:otherwise>
-	   $("#page").attr("action","<c:url value='/poster/getAll.action'/>");
-	   </c:otherwise>
-	</c:choose>
+	  $("#page").attr("action","<c:url value='/poster/getAllRecords.action'/>");
 	  $("#page").submit();
   }
 </script>
@@ -39,8 +32,13 @@
 	<span style="color: blue;text-decoration: underline;">返回</span>
 	</a>
 	</c:if>
-	<c:if test="${user.user_type eq 1 }">
+	<c:if test="${user.user_type eq 1 and not empty flag_id }">
 	<a href="<c:url value='/user/getAllUser.action'/>">
+	<span style="color: blue;text-decoration: underline;">返回</span>
+	</a>
+	</c:if>
+	<c:if test="${user.user_type eq 1 and empty flag_id }">
+	<a href="<c:url value='/jsp/welcome.jsp'/>">
 	<span style="color: blue;text-decoration: underline;">返回</span>
 	</a>
 	</c:if>
@@ -84,7 +82,7 @@
 			</td>
 			<td>
 			<form action="<c:url value='/jsp/poster/show.jsp'/>" style="padding:0px;margin:0px;" method="post">
-			    <input type="hidden" name="user_id" value="${current_userId }">
+			    <input type="hidden" name="user_id" value="${flag_id }">
 			    <input type="hidden" name="record_user" value="${record.record_user.user_id }">
 			    <input type="hidden" name="poster_user" value="${record.record_poster.poster_user }">
 			    <input type="hidden" name="poster_org" value="${record.record_poster.poster_org }">
@@ -109,7 +107,9 @@
 	</c:forEach>
 <tr style="background-color:white;border-bottom: 0px;">
 <td><form action="" id="page">
-     <input type="hidden" name="userExtend.user_id" value="${current_userId }">
+     <c:if test="${not empty flag_id and flag_id != '' }">
+     <input type="hidden" id="current_user" name="userExtend.user_id" value="${flag_id }">
+     </c:if>
      <input type="hidden" id="currentPage" name="current_page" value="">
    </form></td>
 </tr>
