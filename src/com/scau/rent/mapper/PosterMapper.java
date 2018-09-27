@@ -18,17 +18,11 @@ public interface PosterMapper {
     /*查询申请同一楼栋海报数量*/
     public Integer getRowCount(PosterExtend posterExtend) throws Exception;
     
-    /*查询某用户的所有申请记录*/
+    /*查询所有申请记录*/
     public List<PosterRecordExtend> selectAllRecords(QueryVo queryVo) throws Exception;
     
-    /*查询某用户的所有申请记录*/
-    public List<PosterRecordExtend> selectAll(QueryVo queryVo) throws Exception;
-    
-    /*查询用户的总记录数*/
+    /*查询总记录数*/
     public Integer getRecordNumber(QueryVo queryVo) throws Exception;
-    
-    /*查询用户的总记录数*/
-    public Integer getTotalNumber(QueryVo queryVo) throws Exception;
     
     /*更新申请记录状态*/
     public void updateRecordStatus(PosterRecordExtend posterRecordExtend) throws Exception;

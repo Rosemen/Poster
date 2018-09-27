@@ -23,9 +23,6 @@ public interface PosterService {
    /*分页查询用户的所有申请记录*/
    public PageBean<PosterRecordExtend> getPageBean(QueryVo queryVo) throws Exception;
    
-   /*分页查询所有用户的所有申请记录*/
-   public PageBean<PosterRecordExtend> getPageBeans(QueryVo queryVo) throws Exception;
-   
    /*处理申请是否通过*/
    public void handleRecord(PosterRecordExtend posterRecordExtend) throws Exception;
 

@@ -75,7 +75,8 @@ public class PosterController {
 	
 	@RequestMapping(value = "/getAll.action")
 	public String getAll(QueryVo queryVo,HttpSession session,Model model) throws Exception {
-		PageBean<PosterRecordExtend> pageBean = posterService.getPageBeans(queryVo);
+		queryVo.setUserExtend(null);
+		PageBean<PosterRecordExtend> pageBean = posterService.getPageBean(queryVo);
 		model.addAttribute("pageBean", pageBean);
 		return "poster/records";
 	}

@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from t_poster where poster_location = #{poster_location}
 	</select>
 
-	<!-- 查询用户的所有申请记录 -->
+	<!-- 查询所有申请记录 -->
 	<resultMap type="com.scau.rent.entity.extend.PosterRecordExtend"
 		id="selectAllRecordsMap">
 		<id property="record_id" column="record_id" />
@@ -67,35 +67,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result property="poster_anotherpic" column="poster_anotherpic" />
 		</association>
 	</resultMap>
+	<sql id="queryAll">
+	    SELECT t_record.*,t_poster.*,t_user.*
+		from t_record,t_poster,t_user
+		<where>
+		    <if test="userExtend != null">
+		        <if test="userExtend.user_id != null">
+		            t_user.user_id = #{userExtend.user_id}
+		        </if>
+		    </if>
+		    AND t_user.user_id = t_record.record_user
+		    AND t_record.record_poster = t_poster.poster_id 
+		</where>
+		order by t_record.record_createtime desc
+		limit #{start},#{end}
+	</sql>
 	<select id="selectAllRecords" resultMap="selectAllRecordsMap"
 		parameterType="com.scau.rent.entity.QueryVo">
-		SELECT t_record.*,t_poster.*,t_user.*
-		from t_record,t_poster,t_user
-		where t_user.user_id = #{userExtend.user_id}
-		AND t_user.user_id = t_record.record_user
-		AND t_record.record_poster = t_poster.poster_id
-		order by t_record.record_createtime desc
-		limit #{start},#{end}
-	</select>
-	
-	<!-- 管理员查询所有的申请记录 -->
-	<select id="selectAll" resultMap="selectAllRecordsMap" parameterType="com.scau.rent.entity.QueryVo">
-	   SELECT t_record.*,t_poster.*,t_user.*
-		from t_record,t_poster,t_user
-		where t_user.user_id = t_record.record_user
-		AND t_record.record_poster = t_poster.poster_id
-		order by t_record.record_createtime desc
-		limit #{start},#{end}
+		 <include refid="queryAll"></include>
 	</select>
 
-	<!-- 查询用户申请总记录数 -->
+	<!-- 查询申请总记录数 -->
 	<select id="getRecordNumber" resultType="Integer" parameterType="com.scau.rent.entity.QueryVo">
-	    select count(*) from t_record where record_user = #{userExtend.user_id}
-	</select>
-	
-	<!--  查询所有的申请总数 -->
-	<select id="getTotalNumber" resultType="Integer" parameterType="com.scau.rent.entity.QueryVo">
-	    select count(*) from t_record
+	    select count(*) from t_record 
+	    <where>
+	        <if test="userExtend != null">
+	            <if test="userExtend.user_id != null">
+	                 record_user = #{userExtend.user_id}
+	            </if>
+	        </if>
+	    </where>
 	</select>
 	
 	<!-- 更新申请记录的状态 -->

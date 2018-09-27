@@ -49,7 +49,7 @@ public class PosterServiceImp implements PosterService {
 	}
 
 
-	/*分页查询某个用户的所有记录*/
+	/*分页查询所有记录*/
 	public PageBean<PosterRecordExtend> getPageBean(QueryVo queryVo) throws Exception {
 		//得到总记录数
 		Integer total_record = posterMapper.getRecordNumber(queryVo);
@@ -67,23 +67,6 @@ public class PosterServiceImp implements PosterService {
 		return pageBean;
 	}
 	
-	/*分页查询所有用户的所有记录*/
-	public PageBean<PosterRecordExtend> getPageBeans(QueryVo queryVo) throws Exception {
-		//得到总记录数
-		Integer total_record = posterMapper.getTotalNumber(queryVo);
-		//创建分页对象
-		PageBean<PosterRecordExtend> pageBean =
-				new PageBean<PosterRecordExtend>(queryVo.getCurrent_page(),total_record);
-		//开始索引
-		Integer start = (pageBean.getCurrent_page() - 1)*pageBean.getPage_size();
-		Integer end = pageBean.getPage_size();
-		queryVo.setStart(start);
-		queryVo.setEnd(end);
-		//查询数据库，得到记录列表
-        List<PosterRecordExtend> records = posterMapper.selectAll(queryVo);
-		pageBean.setRecords(records);
-		return pageBean;
-	}
 
 	/*处理申请是否通过*/
 	public void handleRecord(PosterRecordExtend posterRecordExtend) throws Exception {
