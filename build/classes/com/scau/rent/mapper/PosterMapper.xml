@@ -152,7 +152,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 更新申请记录的状态 -->
 	<update id="updateRecordStatus" parameterType="com.scau.rent.entity.extend.PosterRecordExtend">
-	   update t_record set record_status = #{record_status},record_result = #{record_result}
+	   update t_record
+	   <set>
+	      <if test="record_status != null and record_status != ''">
+	         record_status = #{record_status},
+	      </if>
+	      <if test="record_result != null and record_result != ''">
+	         and record_result = #{record_result}
+	      </if>
+	   </set>
 	   <where>
 	      <if test="record_id != null and record_id != ''">
 	         record_id = #{record_id}

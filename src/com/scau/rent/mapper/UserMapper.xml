@@ -7,13 +7,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据用户名查询数据库 -->
 	<select id="findByName" parameterType="com.scau.rent.entity.extend.UserExtend"
 		resultType="com.scau.rent.entity.extend.UserExtend">
-		select * from t_user where user_name=#{user_name}
+		select * from t_user 
+		<where>
+		    <if test="user_name != null and user_name != ''">
+		       user_name=#{user_name}
+		    </if>
+		</where>
 	</select>
 	
 	<!-- 根据用户ID查询数据库 -->
 	<select id="findByID" parameterType="com.scau.rent.entity.extend.UserExtend"
 		resultType="com.scau.rent.entity.extend.UserExtend">
-		select * from t_user where user_id=#{user_id}
+		select * from t_user 
+		<where>
+		    <if test="user_id != null and user_id != ''">
+		       user_id=#{user_id}
+		    </if>
+		</where>
 	</select>
 	
 	<!-- 查询所有用户：属于管理员的操作 -->
@@ -21,8 +31,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.scau.rent.entity.extend.UserExtend">
 		select * from t_user 
 		where user_type = 0
-		order by #{userExtend.user_name}
-		limit #{start},#{end} 
+		<if test="userExtend != null">
+		    <if test="userExtend.user_name != null and userExtend.user_name != ''">
+		     order by #{userExtend.user_name}
+		    </if>
+		</if>
+		<if test="start != null and end != null">
+		    limit #{start},#{end} 
+		</if>
 	</select>
 	
 	<!-- 查询普通用户总数  -->
@@ -42,24 +58,64 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 修改用户密码 -->
 	<update id="updatePassword" parameterType="com.scau.rent.entity.QueryVo">
 	  update t_user
-	  set user_password = #{userExtend.user_password}
-	  where user_id = #{userExtend.user_id}
+	  <set>
+	     <if test="userExtend != null">
+	        <if test="userExtend.user_password != null and userExtend.user_password != ''">
+	           user_password = #{userExtend.user_password}
+	        </if>
+	     </if>
+	  </set>
+	  <where>
+	       <if test="userExtend != null">
+	          <if test="userExtend.user_id != null and userExtend.user_id != ''">
+	           user_id = #{userExtend.user_id}
+	          </if>
+	       </if>
+	  </where>
 	</update>
 	
 	<!-- 修改个人信息 -->
 	<update id="updateUser" parameterType="com.scau.rent.entity.QueryVo">
 	  update t_user
-	  set user_name = #{userExtend.user_name},
-	      user_phone = #{userExtend.user_phone},
-	      user_email = #{userExtend.user_email},
-	      user_org = #{userExtend.user_org}
-	  where user_id = #{userExtend.user_id}
+	  <set>
+	    <if test="userExtend != null">
+	       <if test="userExtend.user_name != null and userExtend.user_name != ''">
+	         user_name = #{userExtend.user_name}, 
+	       </if>
+	       <if test="userExtend.user_phone != null and userExtend.user_phone != ''">
+	         user_phone = #{userExtend.user_phone},
+	       </if>
+	       <if test="userExtend.user_email != null and userExtend.user_email != ''">
+	         user_email = #{userExtend.user_email},
+	       </if>
+	       <if test="userExtend.user_org != null and userExtend.user_org != ''">
+	         user_org = #{userExtend.user_org}
+	       </if>
+	    </if>
+	  </set>
+	  <where>
+	     <if test="userExtend != null">
+	        <if test="userExtend.user_id != null and userExtend.user_id != ''">
+	           user_id = #{userExtend.user_id}
+	        </if>
+	     </if>
+	  </where>
 	</update>
 	
-	<!-- 修改个人信息 -->
+	<!-- 修改个人图片 -->
 	<update id="updatePic" parameterType="com.scau.rent.entity.QueryVo">
 	  update t_user
-	  set user_pic = #{userExtend.user_pic }
-	  where user_id = #{userExtend.user_id}
+	  <set>
+	     <if test="userExtend != null">
+	        <if test="userExtend.user_pic != null and userExtend.user_pic != ''">
+	          user_pic = #{userExtend.user_pic }
+	        </if>
+	     </if>
+	  </set>
+	  <where>
+	      <if test="userExtend != null">
+	         user_id = #{userExtend.user_id} 
+	      </if>
+	  </where>
 	</update>
 </mapper>
