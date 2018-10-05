@@ -60,10 +60,13 @@ public class UserController {
 	public String login(RedirectAttributes model, HttpSession session, UserExtend userExtend) {
 		User user = null;
 		try {
+			//设置同一浏览器只能登录一个用户
+			if(null != session.getAttribute("user"))
+				return "redirect:/user/toLogin.action";
 			// 登录
 			user = userService.login(userExtend);
-			// 保存对象到session中
-			session.setAttribute("user", user);
+			//将user保存到session中
+			session.setAttribute("user",user);
 		} catch (Exception e) {
 			System.out.println(e);
 			// 保存错误信息
@@ -74,7 +77,7 @@ public class UserController {
 			return "redirect:/user/toLogin.action";
 		}
 		//重定向到主页面
-		return "redirect:/jsp/home.jsp";
+		return "redirect:/user/toHome.action";
 	}
 
 	/* 用户退出登录 */
@@ -86,7 +89,7 @@ public class UserController {
 			session.invalidate();
 			return "redirect:/user/toLogin.action";
 		} else
-			return "redirect:/jsp/error.jsp";
+			return "redirect:/user/toError";
 
 	}
 
@@ -161,6 +164,17 @@ public class UserController {
 		// 保存表单对象，回显
 		model.addAttribute("user", user);
 		return "user/regist";
-		//return "user/delete";
+	}
+	
+	/* 重定向到主页面 */
+	@RequestMapping("/toHome")
+	public String toHome() {
+		return "home";
+	}
+	
+	/* 重定向到错误页面 */
+	@RequestMapping("/toError")
+	public String toError() {
+		return "error";
 	}
 }

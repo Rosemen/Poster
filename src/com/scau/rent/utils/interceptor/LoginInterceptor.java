@@ -32,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		if(request.getSession().getAttribute("user")!=null)
 			return true;
 		//否则重定向到登录页面
-		response.sendRedirect(request.getContextPath()+"/jsp/error.jsp");
+		response.sendRedirect(request.getContextPath()+"/user/toError.action");
 		return false;
 	}
 
